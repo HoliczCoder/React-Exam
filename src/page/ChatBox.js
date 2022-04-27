@@ -2,17 +2,32 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { db } from "../firebase";
+import { collection, addDoc } from "firebase/firestore";
 
 export default function ChatBox() {
   const navigate = useNavigate();
   const [comment, setComment] = useState("");
+
+  //
   const push = (e) => {
     e.preventDefault();
     if (!comment) {
       alert("please write somethingg");
       return;
     }
-    setComment(e.target.value);
+    //setComment(e.target.value);
+    const collectionRef = collection(db, "messages");
+    (async () => {
+      try {
+        await addDoc(collectionRef, {
+          comment,
+        });
+      } catch (e) {
+        console.log(e);
+      }
+      console.log("add thanh cong");
+      setComment("");
+    })();
   };
   return (
     <div>
@@ -96,24 +111,15 @@ export default function ChatBox() {
               <div className=" helloworld relative flex ">
                 <form className="w-full" onSubmit={(e) => push(e)}>
                   <input
+                    onChange={(evt) => setComment(evt.target.value)}
                     type="text"
+                    value={comment}
                     placeholder="Write your message!"
                     className="w-full focus:outline-none focus:placeholder-gray-400 text-gray-600 placeholder-gray-600 pl-12 bg-gray-200 rounded-md py-3"
                   />
                   <div className="absolute right-0 items-center inset-y-0 hidden sm:flex">
-                    <button
-                      type="button"
-                      className="inline-flex items-center justify-center rounded-lg px-4 py-3 transition duration-500 ease-in-out text-white bg-blue-500 hover:bg-blue-400 focus:outline-none"
-                    >
-                      <span className="font-bold">Send</span>
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 20 20"
-                        fill="currentColor"
-                        className="h-6 w-6 ml-2 transform rotate-90"
-                      >
-                        <path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z" />
-                      </svg>
+                    <button className="inline-flex items-center justify-center rounded-lg px-4 py-3 transition duration-500 ease-in-out text-white bg-blue-500 hover:bg-blue-400 focus:outline-none">
+                      Send
                     </button>
                   </div>
                 </form>

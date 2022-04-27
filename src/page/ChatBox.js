@@ -1,11 +1,17 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { db } from "../firebase";
+import { collection, addDoc } from "firebase/firestore";
 export default function ChatBox() {
   const navigate = useNavigate();
   const [comment, setComment] = useState("");
   const push = (e) => {
     e.preventDefault();
+    if (!comment) {
+      alert("please write somethingg");
+      return;
+    }
     setComment(e.target.value);
   };
   return (

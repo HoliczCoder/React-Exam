@@ -14,7 +14,6 @@ export default function App() {
           <Route path="/chatbox" element={<ChatBox />}></Route>
           <Route path="/listbox" element={<ListBox />}></Route>
         </Routes>
-        {/* <Link to={`/about?name=mien&age=20`}>about</Link> */}
       </BrowserRouter>
     </div>
   );

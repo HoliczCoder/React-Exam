@@ -1,18 +1,18 @@
 import React from "react";
 import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
-import About from "./components/About";
-
-import ChatBox from "../src/page/ChatBox.js";
-import ListBox from "./page/ListBox";
-
+import Login from "./pages/Login";
+import SignIn from "./pages/SignIn";
+import Home from "./pages/Home/Home";
+import ChatBox from "./pages/ChatBox";
 export default function App() {
   return (
     <div>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<About />}></Route>
-          <Route path="/chatbox" element={<ChatBox />}></Route>
-          <Route path="/listbox" element={<ListBox />}></Route>
+          <Route path="/" element={<Login />} />
+          <Route path="/SignIn" element={<SignIn />} />
+          <Route path="/Home" element={<Home />} />
+          <Route path="/ChatBox" element={<ChatBox />}></Route>
         </Routes>
       </BrowserRouter>
     </div>

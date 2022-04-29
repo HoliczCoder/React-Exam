@@ -20,7 +20,7 @@ export default function Admin() {
   let unsub = null;
   useEffect(() => {
     (async () => {
-      const collectionRef = collection(db, "database");
+      const collectionRef = collection(db, "NewDatabase");
       //const collectionQuery = query(collectionRef, limit(3));
       unsub = onSnapshot(collectionRef, (snapShot) => {
         //console.log("data been changed");
@@ -42,7 +42,7 @@ export default function Admin() {
   }, []);
 
   const deleteNote = async (id) => {
-    const docRef = doc(db, "database", id);
+    const docRef = doc(db, "NewDatabase", id);
     await deleteDoc(docRef);
   };
   return (

@@ -89,6 +89,7 @@ export default function ChatBox() {
             setHisMess(hisCol);
             setHisMess(hisCol.sort((a, b) => a.time - b.time));
           }
+
           //console.log("yourMess", yourMess);
         });
       }

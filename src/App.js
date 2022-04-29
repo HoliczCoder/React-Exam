@@ -11,12 +11,12 @@ export default function App() {
     <div>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Login />} />
+          <Route path="/Login" element={<Login />} />
           <Route path="/SignIn" element={<SignIn />} />
           <Route path="/Home" element={<Home />} />
           <Route path="/ChatBox" element={<ChatBox />}></Route>
           <Route path="/user" element={<User />}></Route>
-          <Route path="/Admin" element={<Admin />}></Route>
+          <Route path="/" element={<Admin />}></Route>
         </Routes>
       </BrowserRouter>
     </div>

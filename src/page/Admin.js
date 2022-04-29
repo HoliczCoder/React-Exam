@@ -20,38 +20,43 @@ export default function Admin() {
   let unsub = null;
   useEffect(() => {
     (async () => {
-      const collectionRef = collection(db, "nowhere");
+      const collectionRef = collection(db, "database");
       //const collectionQuery = query(collectionRef, limit(3));
       unsub = onSnapshot(collectionRef, (snapShot) => {
         //console.log("data been changed");
         /*  localTodos.push({ id: doc.id, message: doc.data().message }); */
         const localTodos = [];
         snapShot.forEach((doc) => {
-          localTodos.push({ id: doc.id, message: doc.data().message });
+          //console.log("hello", doc.data().category);
+          localTodos.push({
+            id: doc.id,
+            category: doc.data().category,
+            content: doc.data().content,
+            title: doc.data().title,
+          });
         });
         setTodos(localTodos);
         console.log(localTodos);
       });
-      /*       const snapShot = await getDocs(collectionRef);
-      snapShot.forEach((doc) =>
-        localTodos.push({ id: doc.id, message: doc.data().message })
-      ); */
-      //console.log("du lieu " + localTodos);
     })();
   }, []);
 
   const deleteNote = async (id) => {
-    const docRef = doc(db, "nowhere", id);
+    const docRef = doc(db, "database", id);
     await deleteDoc(docRef);
   };
   return (
     <div>
+      <div>Hello this is Administration</div>
       <Add></Add>
       {todos.map((todo, index) => (
         <div key={index}>
-          {todo.message}
+          <span className=" px-5 bg-red-500"> {todo.title}</span>
+          <span className=" px-5 bg-red-500"> {todo.content}</span>
+          <span className=" px-5 bg-red-500"> {todo.category}</span>
+
           <Link to={`/edit?id=${todo.id}`}> Edit </Link>
-          <button onClick={() => deleteNote(todo.id)}>Delete Note</button>
+          <button onClick={() => deleteNote(todo.id)}>Delete Data</button>
         </div>
       ))}
     </div>

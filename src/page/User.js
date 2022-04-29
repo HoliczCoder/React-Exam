@@ -2,6 +2,7 @@ import React, { cloneElement, useState } from "react";
 import { useEffect } from "react";
 import { db } from "../firebase";
 import Add from "../components/Add";
+
 import {
   collection,
   getDocs,
@@ -12,49 +13,61 @@ import {
   orderBy,
   limitToLast,
   limit,
+  where,
 } from "firebase/firestore";
 import { Link } from "react-router-dom";
+import { async } from "@firebase/util";
 
 export default function User() {
   const [todos, setTodos] = useState([]);
+  const [newCateogry, setNewCateogry] = useState([]);
+  const [content, setNewContent] = useState("");
+  const [title, setTitle] = useState("");
+
+  ///////////////////////////////////////////////
   let unsub = null;
   useEffect(() => {
-    console.log("use effect bi goi lai");
     (async () => {
-      const collectionRef = collection(db, "nowhere");
-      //const collectionQuery = query(collectionRef, limit(3));
+      const collectionRef = collection(db, "newCateogry");
+
       unsub = onSnapshot(collectionRef, (snapShot) => {
-        //console.log("data been changed");
-        /*  localTodos.push({ id: doc.id, message: doc.data().message }); */
         const localTodos = [];
         snapShot.forEach((doc) => {
-          localTodos.push({ id: doc.id, message: doc.data().message });
+          localTodos.push({
+            id: doc.id,
+            category: doc.data().category,
+            time: doc.data()?.time?.seconds,
+          });
         });
-        setTodos(localTodos);
-        console.log(localTodos);
+        setTodos(localTodos.sort((a, b) => a.time - b.time));
+        console.log(localTodos[localTodos.length - 1].category);
+        setNewCateogry(localTodos[localTodos.length - 1].category);
+        // console.log("ban gi moi nhat", newCateogry);
       });
-      /*       const snapShot = await getDocs(collectionRef);
-      snapShot.forEach((doc) =>
-        localTodos.push({ id: doc.id, message: doc.data().message })
-      ); */
-      //console.log("du lieu " + localTodos);
     })();
   }, []);
 
-  const deleteNote = async (id) => {
-    const docRef = doc(db, "nowhere", id);
-    await deleteDoc(docRef);
+  const lookingArticle = async (todo) => {
+    const citiesRef = collection(db, "NewDatabase");
+    const q = query(citiesRef, where("category", "==", todo));
+    const querySnapshot = await getDocs(q);
+    querySnapshot.forEach((doc) => {
+      // doc.data() is never undefined for query doc snapshots
+      console.log(doc.id, " => ", doc.data());
+      setNewContent(doc.data().content);
+      setTitle(doc.data().title);
+    });
   };
   return (
     <div>
-      <Add></Add>
-      {todos.map((todo, index) => (
-        <div key={index}>
-          {todo.message}
-          <Link to={`/edit?id=${todo.id}`}> Edit </Link>
-          <button onClick={() => deleteNote(todo.id)}>Delete Note</button>
+      <div>Danh muc san pham</div>
+      {newCateogry.map((todo, index) => (
+        <div key={index} className=" w-50 h-50  bg-green-500">
+          <button onClick={() => lookingArticle(todo)}>{todo}</button>
         </div>
       ))}
+      <div> {title} </div>
+      <div>{content}</div>
     </div>
   );
 }
